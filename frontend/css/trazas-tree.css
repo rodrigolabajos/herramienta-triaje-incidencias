@@ -1,0 +1,298 @@
+/* ============================================================
+   TRAZAS — VISOR XML POR SECCIONES
+   ============================================================ */
+
+/* ── Contenedor raíz ──────────────────────────────────────── */
+.tsec-root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0.25rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.83rem;
+}
+
+/* ── BLOQUE SECCIÓN (nodo con hijos) ─────────────────────── */
+.tsec-block {
+  border: 1px solid var(--sec-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tsec-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  background: var(--sec-light);
+  border-bottom: 1px solid var(--sec-border);
+  cursor: default;
+  user-select: none;
+}
+
+.tsec-toggle {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--sec-header);
+  cursor: pointer;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+  line-height: 1;
+  opacity: 0.75;
+  transition: opacity 0.15s;
+}
+.tsec-toggle:hover { opacity: 1; }
+
+.tsec-tag {
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sec-header);
+}
+
+.tsec-header-attrs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-left: 0.1rem;
+}
+
+.tsec-cnt {
+  margin-left: auto;
+  font-size: 0.7rem;
+  background: var(--sec-header);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0 0.45rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.tsec-body {
+  padding: 0.3rem 0.5rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* ── FILA HOJA (campo → valor) ───────────────────────────── */
+.tsec-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+  transition: background 0.1s;
+}
+.tsec-row:hover { background: rgba(0,0,0,0.03); }
+
+.tsec-row-key {
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 120px;
+}
+
+.tsec-row-key--own {
+  color: #9ca3af;
+  font-weight: 500;
+  text-transform: none;
+  font-size: 0.75rem;
+}
+
+.tsec-row-val {
+  color: #1f2937;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* ── Atributos inline (badges) ───────────────────────────── */
+.tsec-attr,
+.tsec-row-attrs .tsec-attr {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  background: rgba(0,0,0,0.05);
+  border-radius: 4px;
+  padding: 0.05rem 0.4rem;
+  font-size: 0.73rem;
+  color: #374151;
+  white-space: nowrap;
+}
+.tsec-attr b { color: #4b5563; font-weight: 600; margin-right: 0.05rem; }
+
+.tsec-row-attrs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.tsec-body > .tsec-block {
+  margin-top: 0.2rem;
+}
+
+.tsec-row--own {
+  background: rgba(0,0,0,0.02);
+  border-radius: 4px;
+}
+
+/* ── Cargando / vacío ────────────────────────────────────── */
+.trazas-loading,
+.trazas-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+/* ── Tab plano ───────────────────────────────────────────── */
+.trazas-raw pre {
+  font-family: "Consolas", "Fira Code", monospace;
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* ── Barra de búsqueda ───────────────────────────────────── */
+/* NOTA: .hidden está definido como display:none !important en style.css
+   — no hace falta redefinirlo aquí. La barra arranca hidden y JS la muestra. */
+
+#trazasSearchBar {
+  /* Cuando JS quite la clase hidden, este bloque toma el control */
+  padding: 8px 14px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
+  /* display lo controla únicamente la clase hidden via style.css */
+}
+
+.trazas-search-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 12px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+
+.trazas-search-icon {
+  font-size: 1.2rem;
+  opacity: 0.6;
+  color: #64748b; 
+  flex-shrink: 0;
+  line-height: 1;
+  margin-right: 6px;
+}
+
+.trazas-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.84rem;
+  color: #1f2937;
+  min-width: 0;
+  line-height: 1.4;
+}
+.trazas-search-input::placeholder { color: #94a3b8; }
+
+.trazas-search-count {
+  font-size: 0.72rem;
+  color: #64748b;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin: 6px;
+}
+.trazas-search-count.no-results { color: #ef4444; }
+
+#trazasSearchClear {
+  border: none;
+  background: none;
+  padding: 5px;
+  font-size: 1rem;
+  color: #94a3b8;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
+}
+#trazasSearchClear:hover { 
+  color: #ff0000; 
+  background-color: #ff000011;
+}
+
+/* ── Resaltado de coincidencias ──────────────────────────── */
+.tsec-match {
+  background: #fef08a;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Filas sin coincidencia: tenues pero visibles */
+.tsec-row.tsec-hidden {
+  opacity: 0.15;
+}
+
+/* Sección sin coincidencias: cabecera tenue, cuerpo oculto */
+.tsec-block.tsec-no-match > .tsec-header {
+  opacity: 0.25;
+}
+.tsec-block.tsec-no-match > .tsec-body {
+  display: none !important;
+}
+
+/* ── Botones de acción en la barra de tabs ───────────────── */
+.trazas-tab-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 4px;
+}
+
+.trazas-action-btn {
+  border: 1px solid var(--border, #e2e8f0);
+  background: var(--surface, #fff);
+  color: var(--text-muted, #64748b);
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+.trazas-action-btn:hover {
+  background: var(--accent-dim, #e8f4fd);
+  color: var(--accent, #1164a0);
+  border-color: var(--accent, #1164a0);
+}
+
+/* Feedback visual al copiar */
+.trazas-action-btn.copied {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+
+/* ── Fix alineación vertical botones de acción ───────────── */
+.trazas-view-tabs {
+  align-items: center;
+  padding-bottom: 6px;
+}
+
+.trazas-tab-actions {
+  padding-bottom: 0;
+  margin-bottom: 1px;
+}

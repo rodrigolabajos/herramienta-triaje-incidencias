@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta Triaje — TriajeVN</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/trazas-tree.css">
+  <link rel="stylesheet" href="css/documentacion.css">
+</head>
+<body>
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-badge">Consulta IA</span>
+      <h1>Motor de <span>Triaje</span></h1>
+      <div class="header-meta"><div><b>Análisis automático</b></div><div>Similitud + Scoring</div></div>
+    </div>
+  </header>
+
+  <div class="nav-bar">
+    <a href="index.html" class="button-back">Inicio</a>
+    <div class="nav-actions">
+      <select id="departamentoSelect" class="button-like-select">
+        <option value="">Todos los departamentos</option>
+        <option value="Hub Activo">Hub Activo</option>
+        <option value="Particulares">Particulares</option>
+        <option value="Automatizacion">Automatizacion</option>
+        <option value="Documentos">Documentos</option>
+        <option value="Precios">Precios</option>
+        <option value="Negocio">Negocio</option>
+        <option value="CAU">CAU</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="consulta-container">
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="consulta-left">
+      <div class="panel-title"><span>Parámetros</span></div>
+
+      <label class="label-strong">Descripción <span class="required">*</span></label>
+      <input type="text" id="descripcionInput" placeholder="Ej: El precio del producto no se actualiza" autocomplete="off" style="margin-bottom:16px">
+
+      <label class="label-strong">Código de error</label>
+      <input type="text" id="errorInput" placeholder="Ej: ERR1234" autocomplete="off" style="margin-bottom:16px">
+
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button id="buscarBtn" style="flex:1">🔍 Buscar</button>
+        <button id="limpiarBtn" class="btn-limpiar hidden" title="Limpiar">✕</button>
+      </div>
+
+      <!-- RESULTADO -->
+      <div class="resultado-box" id="resultadoBox" style="display:none">
+        <strong>✦ Departamento Recomendado</strong>
+        <p id="departamentoResultado"></p>
+        <p id="confianzaResultado"></p>
+        <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill" style="width:0%"></div></div>
+
+        <div class="triaje-confirm" id="triaje-confirm">
+          <span class="triaje-label"><b>¿Es correcto?</b></span>
+          <button class="btn-triaje-ok" id="btnTriajeOk">✓ Sí</button>
+          <button class="btn-triaje-ko" id="btnTriajeKo">✗ No</button>
+          <span class="triaje-feedback" id="triajeFeedback"></span>
+        </div>
+        <div id="correccionBox" class="hidden" style="margin-top:8px">
+          <select id="deptoCorreccion" style="width:100%;margin-bottom:6px;height:36px;font-size:12px">
+            <option value="">— Departamento correcto —</option>
+            <option value="Hub Activo">Hub Activo</option>
+            <option value="Particulares">Particulares</option>
+            <option value="Automatizacion">Automatizacion</option>
+            <option value="Documentos">Documentos</option>
+            <option value="Precios">Precios</option>
+            <option value="Negocio">Negocio</option>
+            <option value="CAU">CAU</option>
+          </select>
+          <button id="btnEnviarCorreccion" style="width:100%;font-size:12px;padding:7px 0">Confirmar corrección</button>
+        </div>
+      </div>
+
+      <!-- IA BOX -->
+      <div class="ia-box" id="iaCard" style="display:none">
+        <div class="ia-box-header">
+          <strong>Análisis IA</strong>
+          <button class="btn-ia-expand" id="btnIaExpand" title="Ver chat completo">↗</button>
+        </div>
+        <p id="iaExplanation"></p>
+        <div id="iaQuestionBox" class="hidden">
+          <input type="text" id="iaQuestionInput" placeholder="Pregunta sobre esta recomendación...">
+          <button id="iaAskBtn">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="consulta-right" id="listaResultados">
+      <div class="empty-state">
+        <div class="empty-icon">🔎</div>
+        <div>Introduce una descripción y pulsa Buscar<br>para ver incidencias similares</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CHAT IA -->
+<div class="ia-overlay hidden" id="iaOverlay">
+  <div class="ia-modal">
+    <div class="ia-modal-header">
+      <span>Chat IA — Análisis de incidencia</span>
+      <button class="btn-modal-close" id="btnModalClose">✕</button>
+    </div>
+    <div class="ia-chat-messages" id="chatMessages"></div>
+    <div class="ia-modal-input">
+      <input type="text" id="modalInput" placeholder="Escribe tu pregunta...">
+      <button id="modalSendBtn">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TRAZAS XML -->
+<div class="trazas-overlay hidden" id="trazasOverlay">
+  <div class="trazas-modal">
+    <div class="trazas-modal-header">
+      <span>Visor de trazas</span>
+      <span class="trazas-modal-id" id="trazasModalId"></span>
+      <button class="btn-modal-close" id="btnTrazasClose">✕</button>
+    </div>
+    <div class="trazas-view-tabs">
+      <button class="trazas-tab active" id="tabVisual" onclick="switchTab('visual')">🗂️ Visual</button>
+      <button class="trazas-tab" id="tabPlano" onclick="switchTab('plano')">📄 Texto plano</button>
+      <div class="trazas-tab-actions">
+        <!-- Solo visible en tab Visual -->
+        <button class="trazas-action-btn" id="btnExpandAll"   title="Expandir todo">➕</button>
+        <button class="trazas-action-btn" id="btnCollapseAll" title="Colapsar todo">➖</button>
+        <!-- Solo visible en tab Plano -->
+        <button class="trazas-action-btn hidden" id="btnCopyPlano" title="Copiar al portapapeles">📋 Copiar</button>
+      </div>
+    </div>
+    <div class="trazas-search-bar hidden" id="trazasSearchBar">
+      <div class="trazas-search-inner">
+        <span class="trazas-search-icon">🔍</span>
+        <input
+          type="text"
+          id="trazasSearchInput"
+          class="trazas-search-input"
+          placeholder="Buscar campo o valor…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <span class="trazas-search-count" id="trazasSearchCount"></span>
+        <button class="trazas-search-clear hidden" id="trazasSearchClear" title="Limpiar búsqueda">🧹</button>
+      </div>
+    </div>
+    <div class="trazas-body" id="trazasBody">
+      <div class="trazas-loading"><span class="dots">Cargando trazas...</span></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast" class="toast hidden"></div>
+
+<!-- MODAL DOCUMENTACIÓN -->
+<div id="docOverlay" class="hidden">
+  <div class="doc-modal">
+    <div class="doc-modal-header">
+      <span>Documentación relacionada</span>
+      <span class="doc-modal-id" id="docModalId"></span>
+      <button class="btn-modal-close" id="btnDocClose">✕</button>
+    </div>
+    <div id="docBody">
+      <div class="doc-estado">Buscando documentación…</div>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/trazas.js"></script>
+<script src="js/consulta.js"></script>
+<script src="js/documentacion.js"></script>
+</body>
+</html>

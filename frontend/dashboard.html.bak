@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — TriajeVN</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-badge">Dashboard</span>
+      <h1><span>Estadísticas</span> del Sistema</h1>
+      <div class="header-meta"><div id="dashTotalHdr">– incidencias</div><div>Últimos 30 días</div></div>
+    </div>
+  </header>
+  <div class="nav-bar"><a href="index.html" class="button-back">Inicio</a></div>
+
+  <!-- KPIs -->
+  <div class="dash-kpis">
+    <div class="dash-kpi"><div class="dash-kpi-label">Total incidencias</div><div class="dash-kpi-val" id="kpiTotal">–</div></div>
+    <div class="dash-kpi"><div class="dash-kpi-label">Depto. más activo</div><div class="dash-kpi-val" id="kpiTopDepto" style="font-size:17px;padding-top:4px">–</div></div>
+    <div class="dash-kpi"><div class="dash-kpi-label">Flujos reasignación</div><div class="dash-kpi-val" id="kpiFlujos">–</div></div>
+    <div class="dash-kpi"><div class="dash-kpi-label">Registros 30 días</div><div class="dash-kpi-val" id="kpiRecientes">–</div></div>
+  </div>
+
+  <div class="dash-charts-row">
+    <div class="dash-chart-box" style="flex:1">
+      <div class="dash-chart-title">Por departamento asignado</div>
+      <div id="chartDeptos"></div>
+    </div>
+    <div class="dash-chart-box" style="flex:1">
+      <div class="dash-chart-title">Top flujos de reasignación</div>
+      <div id="chartFlujos"></div>
+    </div>
+  </div>
+
+  <div class="dash-chart-box" style="margin-top:16px">
+    <div class="dash-chart-title">Registros por día (últimos 30 días)</div>
+    <div class="evol-wrap" id="chartEvol"></div>
+    <div id="evolLegend" style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);margin-top:6px;text-align:center"></div>
+  </div>
+
+  <div class="dash-chart-box" style="margin-top:16px">
+    <div class="dash-chart-title">Top errores</div>
+    <div id="chartErrores"></div>
+  </div>
+</div>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

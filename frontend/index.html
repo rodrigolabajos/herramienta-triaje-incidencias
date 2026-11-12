@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TriajeVN — Sistema de Triaje Inteligente</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-badge">Sistema Activo</span>
+      <h1><span>Triaje</span>VN &nbsp;—&nbsp; Soporte de Incidencias</h1>
+      <div class="header-meta"><div><b>v2.0</b></div><div>Soporte inteligente</div></div>
+    </div>
+  </header>
+
+  <div class="card-container">
+    <a href="registrar.html" class="card">
+      <div class="card-icon">📜</div>
+      <h2><b>Registrar<br>Incidencia</b></h2>
+      <p>Guarda casos nuevos para entrenar el sistema.</p>
+      <span class="card-arrow">↗</span>
+    </a>
+    <a href="consulta.html" class="card">
+      <div class="card-icon">🔍</div>
+      <h2><b>Consulta<br>Triaje</b></h2>
+      <p>Recomendación de departamento por similitud.</p>
+      <span class="card-arrow">↗</span>
+    </a>
+  </div>
+
+  <a href="historial.html" class="card-compact">
+    <div class="card-compact-icon">🗂️</div>
+    <div style="flex:1">
+      <div style="font-weight:600;color:var(--text-primary);font-size:13px">Historial de Incidencias</div>
+      <div style="font-size:12px;color:var(--text-muted)">Listado completo con filtros y exportación CSV</div>
+    </div>
+    <div style="color:var(--text-muted);font-size:14px">↗</div>
+  </a>
+
+  <div class="stats-bar" style="margin-top:20px;padding:12px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-family:var(--font-mono);font-size:12px;color:var(--text-muted);display:flex;gap:6px;align-items:center">
+    <span style="color:var(--green)">●</span>
+    Base de conocimiento: <strong id="totalIncidencias" style="color:var(--text-primary)">–</strong> incidencias registradas
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+  fetch(`${API_BASE}/buscar/stats`).then(r => r.json()).then(d => {
+    document.getElementById('totalIncidencias').textContent = d.total_incidencias;
+  }).catch(() => {});
+</script>
+</body>
+</html>

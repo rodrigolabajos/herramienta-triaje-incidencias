@@ -1,0 +1,11 @@
+# Coloca aquí tus documentos de soporte:
+#   PDF, DOCX, ODT, TXT
+#
+# Puedes organizar en subcarpetas:
+#   documentacion/
+#     empleado_juan/errores_documentos/
+#     area_cau/
+#     general/
+#
+# Ejecuta el indexador para que el sistema los encuentre:
+#   python -m backend.scripts.indexar_documentacion

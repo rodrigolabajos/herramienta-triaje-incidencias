@@ -1,0 +1,325 @@
+/* ============================================================
+   DOCUMENTACIÓN — Modal de documentos relacionados
+   Coherente con trazas-tree.css y style.css
+   ============================================================ */
+
+/* ── Overlay (reutiliza .trazas-overlay de style.css) ──────── */
+#docOverlay {
+  position: fixed; inset: 0;
+  background: rgba(10,30,50,.55);
+  backdrop-filter: blur(5px);
+  z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn .18s ease;
+}
+
+/* ── Modal ──────────────────────────────────────────────────── */
+.doc-modal {
+  width: min(820px, 96vw);
+  max-height: 88vh;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp .2s ease;
+}
+
+/* Header — igual que .trazas-modal-header */
+.doc-modal-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+}
+.doc-modal-header > span:first-child {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); flex: 1;
+}
+.doc-modal-id {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-muted);
+}
+
+/* Cuerpo scrollable */
+#docBody {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+
+/* ── Estados loading / vacío ────────────────────────────────── */
+.doc-estado {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; padding: 3rem 2rem;
+  text-align: center; color: var(--text-muted); font-size: .9rem;
+}
+.doc-vacio p    { margin: 0; font-size: .87rem; color: var(--text-secondary); }
+.doc-vacio small{ font-size: .72rem; color: var(--text-muted); }
+.doc-vacio-icon { font-size: 2.6rem; line-height: 1; }
+
+/* ── Lista de documentos ────────────────────────────────────── */
+.doc-lista-header {
+  padding: 10px 16px 6px;
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.doc-lista {
+  display: flex; flex-direction: column;
+  gap: 0; padding: 8px 12px; flex: 1;
+}
+
+.doc-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: var(--surface);
+  transition: box-shadow .15s;
+}
+.doc-item:hover { box-shadow: var(--shadow-sm); }
+
+.doc-item-main {
+  display: flex; align-items: center;
+  gap: 10px; padding: 10px 12px;
+}
+
+/* Badge de extensión */
+.doc-ext-badge {
+  font-size: .65rem; font-weight: 700;
+  background: var(--accent); color: #fff;
+  border-radius: 4px; padding: 2px 7px;
+  flex-shrink: 0; text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.doc-item-info {
+  flex: 1; display: flex; flex-direction: column;
+  gap: 2px; min-width: 0;
+}
+.doc-item-nombre {
+  font-size: .82rem; font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.doc-item-ruta {
+  font-size: .7rem; color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.doc-item-motivo {
+  font-size: .7rem; color: var(--accent);
+  font-style: italic;
+}
+
+/* Score badge */
+.doc-score {
+  font-size: .72rem; font-weight: 700;
+  border-radius: 9999px; padding: 2px 9px;
+  flex-shrink: 0; font-family: var(--font-mono);
+}
+.doc-score-alto  { background: #dcfce7; color: #166534; }
+.doc-score-medio { background: #fef9c3; color: #854d0e; }
+.doc-score-bajo  { background: #f1f5f9; color: #64748b; }
+
+/* Preview de texto */
+.doc-item-preview {
+  padding: 0 12px 8px 12px;
+  font-size: .75rem; color: var(--text-secondary);
+  white-space: pre-wrap; word-break: break-word;
+  max-height: 56px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image:         linear-gradient(to bottom, black 50%, transparent 100%);
+  line-height: 1.5;
+}
+
+/* Acciones */
+.doc-item-acciones {
+  display: flex; gap: 8px; padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2, #f8fafc);
+}
+.doc-btn-ver, .doc-btn-descargar {
+  font-size: .73rem; font-weight: 600;
+  padding: 4px 12px; border-radius: 6px;
+  border: 1px solid var(--border);
+  cursor: pointer; text-decoration: none;
+  transition: background .12s, border-color .12s;
+  color: var(--text-primary);
+  background: var(--surface);
+  line-height: 1.5;
+}
+.doc-btn-ver:hover, .doc-btn-descargar:hover {
+  background: var(--accent-dim, #e8f4fd);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Visor de documento ─────────────────────────────────────── */
+.doc-visor {
+  display: flex; flex-direction: column;
+  flex: 1; min-height: 0;
+}
+
+.doc-visor-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2, #f8fafc);
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.doc-visor-back {
+  color: var(--accent); text-decoration: none;
+  font-size: .75rem; font-weight: 600;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface); padding: 4px 10px;
+  cursor: pointer; flex-shrink: 0;
+  transition: background .12s;
+}
+.doc-visor-back:hover { background: var(--surface-2, #f0f4f8); }
+.doc-visor-nombre {
+  margin-left: 10px;
+  flex: 1; font-size: .8rem; font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 0;
+}
+.doc-visor-descargar {
+  font-size: .73rem; font-weight: 600;
+  color: var(--accent); text-decoration: none;
+  padding: 4px 10px; border: 1px solid var(--accent);
+  border-radius: 6px; flex-shrink: 0;
+  transition: background .12s;
+}
+.doc-visor-descargar:hover { background: var(--accent-dim, #e8f4fd); }
+
+.doc-visor-contenido {
+  flex: 1; overflow: hidden; display: flex; flex-direction: column;
+  min-height: 0;
+}
+
+/* PDF iframe */
+.doc-iframe {
+  flex: 1; width: 100%; height: 100%;
+  border: none; display: block;
+  min-height: 420px;
+}
+
+/* Texto extraído (DOCX/ODT/TXT) */
+.doc-texto-pre {
+  flex: 1; overflow-y: auto;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: .8rem; line-height: 1.65;
+  color: var(--text-primary);
+  white-space: pre-wrap; word-break: break-word;
+  padding: 16px 20px; margin: 0;
+}
+
+/* ── Botón Documentación en tarjetas ────────────────────────── */
+.btn-ver-docs {
+  font-size: .72rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+  white-space: nowrap;
+}
+.btn-ver-docs:hover {
+  background: var(--accent-dim, #e8f4fd);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Botones de acciones en resultados de consulta */
+.card-meta-actions .btn-ver-trazas,
+.card-meta-actions .btn-ver-docs {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(17,100,160,.25);
+  color: var(--accent);
+  box-shadow: none;
+  transform: none !important;
+}
+
+.card-meta-actions .btn-ver-trazas:hover,
+.card-meta-actions .btn-ver-docs:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: none;
+  transform: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Skeleton / shimmer para carga progresiva del panel de docs
+   Añadir al final de documentacion.css (o importar aparte)
+   ══════════════════════════════════════════════════════════════ */
+ 
+/* Animación shimmer compartida */
+@keyframes doc-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+ 
+.skeleton-line,
+.skeleton-badge,
+.skeleton-score {
+  display: inline-block;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-alt, #f0f2f5) 25%,
+    var(--bg-hover, #e4e8ed) 50%,
+    var(--bg-alt, #f0f2f5) 75%
+  );
+  background-size: 400px 100%;
+  animation: doc-shimmer 1.4s ease-in-out infinite;
+}
+ 
+/* Anchos de línea de texto */
+.skeleton-line        { height: 12px; margin-bottom: 6px; }
+.skeleton-line-largo  { width: 70%; }
+.skeleton-line-medio  { width: 50%; }
+.skeleton-line-corto  { width: 30%; }
+ 
+.skeleton-badge {
+  width: 38px;
+  height: 22px;
+  border-radius: 4px;
+}
+ 
+.skeleton-score {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+ 
+/* Tarjeta skeleton: misma estructura que .doc-item real */
+.doc-item-skeleton {
+  opacity: 0.75;
+  pointer-events: none; /* El usuario no puede pulsar mientras carga */
+}
+ 
+/* Botones desactivados en estado skeleton */
+.doc-item-skeleton .doc-btn-ver[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+ 
+.doc-btn-descargar-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}

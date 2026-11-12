@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Incidencia — TriajeVN</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-badge">Registro</span>
+      <h1>Alta de <span>Incidencia</span></h1>
+      <div class="header-meta"><div><b>Tickets triados correctamente</b></div><div>INC-XXXXX / WO-XXXXX</div></div>
+    </div>
+  </header>
+
+  <div class="nav-bar"><a href="index.html" class="button-back">Inicio</a></div>
+
+  <div class="form-box">
+    <div class="form-section-title">Datos de la incidencia mal asignada</div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>ID Incidencia <span class="required">*</span></label>
+        <input type="text" id="idIncidencia" placeholder="Ej: INC-20240423 o WO-0001">
+      </div>
+      <div class="form-field">
+        <label>Error <span class="form-hint">(opcional)</span></label>
+        <input type="text" id="errorInput" placeholder="Código de error si existe">
+      </div>
+      <div class="form-field">
+        <label>Departamento Origen <span class="required">*</span></label>
+        <select id="deptoOrigen">
+          <option value="">— Seleccionar —</option>
+          <option value="Hub Activo">Hub Activo</option>
+          <option value="Particulares">Particulares</option>
+          <option value="Automatizacion">Automatizacion</option>
+          <option value="Documentos">Documentos</option>
+          <option value="Precios">Precios</option>
+          <option value="Negocio">Negocio</option>
+          <option value="CAU">CAU</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Departamento Asignado <span class="required">*</span></label>
+        <select id="deptoAsignado">
+          <option value="">— Seleccionar —</option>
+          <option value="Hub Activo">Hub Activo</option>
+          <option value="Particulares">Particulares</option>
+          <option value="Automatizacion">Automatizacion</option>
+          <option value="Documentos">Documentos</option>
+          <option value="Precios">Precios</option>
+          <option value="Negocio">Negocio</option>
+          <option value="CAU">CAU</option>
+        </select>
+      </div>
+      <div class="form-field full">
+        <label>Descripción <span class="required">*</span></label>
+        <textarea id="descripcionInput" placeholder="Descripción detallada del problema (mínimo 10 caracteres)"></textarea>
+      </div>
+      <div class="form-field full">
+        <label>Trazas <span class="form-hint">(opcional)</span></label>
+        <textarea id="trazasInput" placeholder="Pega aquí el XML de trazas de la incidencia…" style="min-height:90px;font-family:var(--font-mono);font-size:12px"></textarea>
+      </div>
+    </div>
+
+    <div id="mensajeBox" class="hidden"></div>
+    <div class="form-actions">
+      <button type="button" id="registrarBtn">Registrar Incidencia</button>
+    </div>
+
+    <div class="import-section">
+      <div class="form-section-title" style="margin-top:0">Importación masiva</div>
+      <p class="form-note" style="margin-top:0;margin-bottom:14px">
+        Sube un CSV con columnas:
+        <code style="font-family:var(--font-mono);background:var(--accent-dim);padding:1px 6px;border-radius:3px;font-size:11px">id_incidencia, departamento_origen, descripcion, departamento_asignado, error, trazas</code>
+      </p>
+      <label for="csvFileInput" class="button-like-select" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;width:auto">
+        📂 Importar desde CSV
+      </label>
+      <input type="file" id="csvFileInput" accept=".csv" style="display:none">
+      <div id="importResult" class="hidden" style="margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;font-family:var(--font-mono)"></div>
+    </div>
+
+    <p class="form-note">
+      <span class="required">*</span> Campos obligatorios. <strong>Error</strong> y <strong>Trazas XML</strong> son opcionales.
+    </p>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/registrar.js"></script>
+</body>
+</html>

@@ -95,52 +95,6 @@ run.py             Arranque automático con instalación de deps
 
 ---
 
-## Ejecución
-
-### Rápido (recomendado)
-
-```bash
-python run.py
-```
-
-Instala dependencias si faltan e inicia el servidor en `http://localhost:8000`.
-
-### Manual
-
-```bash
-pip install -r backend/requirements.txt
-python -m uvicorn backend.main:app --reload
-```
-
-### Indexar documentación
-
-```bash
-# Automático al arrancar con run.py
-python -m backend.scripts.indexar_documentacion
-
-# Con opciones
-python -m backend.scripts.indexar_documentacion --limite 100
-python -m backend.scripts.indexar_documentacion --root ./documentacion
-```
-
----
-
-## Variables de entorno
-
-Crear `.env` en la raíz del proyecto:
-
-```env
-GROQ_API_KEY=tu_api_key_de_groq
-DOCUMENTACION_ROOT=./documentacion
-ALLOWED_ORIGINS=http://localhost:8000
-```
-
-Sin `GROQ_API_KEY` el sistema funciona completamente salvo las funciones de IA.
-
----
-
-## Endpoints principales
-
 ### Incidencias
 | Método | Ruta | Descripción |
 |--------|------|-------------|
@@ -168,10 +122,3 @@ Sin `GROQ_API_KEY` el sistema funciona completamente salvo las funciones de IA.
 | `GET` | `/documentacion/texto/{id}` | Texto extraído |
 | `POST` | `/documentacion/indexar` | Indexación manual |
 
----
-
-## Notas
-
-- `.env` y `triage.db` no deben subirse al repositorio (están en `.gitignore`).
-- La carpeta `documentacion/` puede contener subcarpetas; el indexador las recorre recursivamente.
-- El sistema de scoring documental no requiere embeddings ni modelos externos: opera sobre texto normalizado y keywords extraídas en el momento de indexar.

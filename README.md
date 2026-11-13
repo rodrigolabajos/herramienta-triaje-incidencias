@@ -2,6 +2,10 @@
 
 Sistema web de apoyo al triaje de incidencias mal asignadas. Combina búsqueda por similitud, trazas técnicas, documentación indexada e IA contextual para ayudar al personal de soporte a tomar decisiones mejor fundamentadas.
 
+> ⚠️ **Aviso:** Esta herramienta es un **proyecto piloto/prototipo** desarrollado
+> con fines formativos y de portfolio. Todos los datos que contiene (incidencias,
+> departamentos, trazas y documentación) son **ficticios** y han sido generados
+> para demostrar su funcionamiento. No contiene información de ninguna empresa real.
 > **El sistema no decide automáticamente.** La decisión final siempre es humana.
 
 ---
